@@ -20,6 +20,8 @@ DEFAULT_STATE_PATH = os.path.expanduser("~/clawd/memory/state.json")
 #   reject cand_deadbeef
 #   edit cand_deadbeef: new text here
 CMD_RE = re.compile(r"^(approve|reject|edit)\s+(cand_[a-zA-Z0-9]+)(?::\s*(.*))?$", re.IGNORECASE)
+INLINE_CMD_RE = re.compile(r"\b(approve|reject|edit)\s+(cand_[a-zA-Z0-9]+)(?::\s*([^\n]+))?\b", re.IGNORECASE)
+CAND_ID_RE = re.compile(r"\bid:\s*(cand_[a-zA-Z0-9]+)\b", re.IGNORECASE)
 
 
 def _load_state(path: str) -> Dict[str, Any]:
@@ -180,13 +182,39 @@ def watch(
                 if not text:
                     continue
 
-                m = CMD_RE.match(text.strip())
-                if not m:
-                    continue
+                # Accept commands in a few forms:
+                # - "approve cand_..."
+                # - Inlined inside a larger reply blob
+                # - Bare "Approve" when the reply quotes our candidate message (contains "id: cand_...")
+                cmd = None
+                cand_id = None
+                rest = ""
 
-                cmd = m.group(1).lower()
-                cand_id = m.group(2)
-                rest = (m.group(3) or "").strip()
+                for line in text.splitlines():
+                    m1 = CMD_RE.match(line.strip())
+                    if m1:
+                        cmd = m1.group(1).lower()
+                        cand_id = m1.group(2)
+                        rest = (m1.group(3) or "").strip()
+                        break
+
+                if cmd is None:
+                    m2 = INLINE_CMD_RE.search(text)
+                    if m2:
+                        cmd = m2.group(1).lower()
+                        cand_id = m2.group(2)
+                        rest = (m2.group(3) or "").strip()
+
+                if cmd is None:
+                    # Special case: user replies "Approve" without id, but includes our quoted candidate block.
+                    if re.search(r"\bapprove\b", text, re.IGNORECASE):
+                        m3 = CAND_ID_RE.search(text)
+                        if m3:
+                            cmd = "approve"
+                            cand_id = m3.group(1)
+
+                if cmd is None or cand_id is None:
+                    continue
 
                 if cand_id not in pending_ids:
                     seen[msg_id] = True
