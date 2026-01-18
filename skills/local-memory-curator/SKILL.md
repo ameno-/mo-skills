@@ -31,9 +31,12 @@ A local-only, staged memory system.
   - `python3 ./scripts/memory_scan.py --write`
 - List pending candidates:
   - `python3 ./scripts/memory_scan.py --list`
-- Approve a candidate:
+- Format a single candidate into a WhatsApp approval request:
+  - `python3 ./scripts/memory_notify_format.py <cand_id>`
+- Watch logs for approvals (user sends `approve cand_...` etc):
+  - `python3 ./scripts/memory_watch_approvals.py --once`
+- Approve/reject directly (CLI):
   - `python3 ./scripts/memory_apply.py approve <id>`
-- Reject a candidate:
   - `python3 ./scripts/memory_apply.py reject <id>`
 
 If your workspace isn’t `~/clawd`, pass `--memory-dir`, `--inbox`, and `--state`.
