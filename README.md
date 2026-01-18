@@ -71,7 +71,7 @@ Local-only staged memory system that turns live chat logs into durable memory + 
 - Stages candidates (no silent writes)
 - On approval, writes to `~/clawd/memory/` and appends tasks into Apple Notes folder `Mo` → note `Mo Open Loops`
 
-(Approval over WhatsApp reactions/replies is the next step; v1 ships with a CLI approve/reject flow.)
+(Approval over WhatsApp reactions/replies is the next step; v1 ships with a CLI approve/reject flow, plus message formatting + an approval watcher for `approve cand_...` style commands.)
 
 ## License
 
