@@ -63,6 +63,16 @@ Quick start:
 
 Defaults are tuned for a fast British male voice (`bm_george`, `en-gb`, `1.08`).
 
+### `local-memory-curator`
+
+Local-only staged memory system that turns live chat logs into durable memory + actionable “Open Loops”.
+
+- Tails Clawdbot session JSONL logs
+- Stages candidates (no silent writes)
+- On approval, writes to `~/clawd/memory/` and appends tasks into Apple Notes folder `Mo` → note `Mo Open Loops`
+
+(Approval over WhatsApp reactions/replies is the next step; v1 ships with a CLI approve/reject flow.)
+
 ## License
 
 TBD (we can add MIT/Apache once you pick). For now: treat as “all rights reserved” until we choose.
