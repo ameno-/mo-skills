@@ -45,6 +45,24 @@ brew install ddgr lynx
 ./skills/terminal-websearch/scripts/webread.sh "https://clawd.bot/" | head -n 80
 ```
 
+### `kokoro-whatsapp-tts`
+
+Local TTS → **WhatsApp-ready voice notes** (OGG/Opus) using Kokoro + ffmpeg.
+
+Quick start:
+
+```bash
+# You need kokoro-tts + the model files + ffmpeg installed.
+
+./skills/kokoro-whatsapp-tts/scripts/kokoro_whatsapp_tts.sh \
+  --text "Big Dawg, it’s Mo." \
+  --out ./mo.ogg \
+  --model ~/models/kokoro/kokoro-v1.0.onnx \
+  --voices ~/models/kokoro/voices-v1.0.bin
+```
+
+Defaults are tuned for a fast British male voice (`bm_george`, `en-gb`, `1.08`).
+
 ## License
 
 TBD (we can add MIT/Apache once you pick). For now: treat as “all rights reserved” until we choose.
